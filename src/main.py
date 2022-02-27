@@ -8,10 +8,16 @@ handler = logging.FileHandler(filename='discord.log', encoding='utf-8', mode='w'
 handler.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger.addHandler(handler)
 
+logger2 = logging.getLogger('amina')
+logger2.setLevel(logging.DEBUG)
+handler2 = logging.StreamHandler(sys.stdout)
+handler2.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger2.addHandler(handler2)
+
 
 def main():
-    discord_token = os.environ("DISCORD_TOKEN")
-    db_path = os.environ("DB_PATH")
+    discord_token = os.environ.get("DISCORD_TOKEN")
+    db_path = os.environ.get("DB_PATH")
 
     intents = Intents.default()
     intents.members = True
@@ -30,6 +36,9 @@ def main():
         sys.exit(1)
     else:
         amina.run(discord_token)
+
+    
+    sys.exit(3)
 
 if __name__ == '__main__':
     main()
