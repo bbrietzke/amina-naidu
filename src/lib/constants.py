@@ -3,7 +3,7 @@ CREATE_DATABASE_TABLES = """
 CREATE TABLE IF NOT EXISTS Players(Id INTEGER PRIMARY KEY, DiscordId TEXT UNIQUE, Name TEXT UNIQUE);
 CREATE TABLE IF NOT EXISTS Games(Id INTEGER PRIMARY KEY, MessageId TEXT NULL, Url TEXT UNIQUE, Title TEXT, StartWeek TEXT UNIQUE);
 CREATE TABLE IF NOT EXISTS Rounds(Id INTEGER PRIMARY KEY, Game INTEGER, Attacker INTEGER, Defender INTEGER, AttackerScore INTEGER, 
-    DefenderScore INTEGER, AttackerFaction INTEGER, DefenderFaction INTEGER,
+    DefenderScore INTEGER, AttackerFaction INTEGER, DefenderFaction INTEGER, CreatedOn DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (Game) REFERENCES Games(id),
     FOREIGN KEY (Attacker) REFERENCES Players(id),
     FOREIGN KEY (Defender) REFERENCES Players(id));
@@ -23,3 +23,4 @@ SELECT_CURRENT_ROUND = "SELECT Id, Url, Title, StartWeek FROM Games WHERE StartW
 INSERT_ROUND = """INSERT INTO Rounds(Game, Attacker, Defender, AttackerScore, DefenderScore, AttackerFaction, DefenderFaction) VALUES
     (?, (select Id from Players where discordId = ?), (select Id from Players where discordId = ?), ?, ?, ?, ?);
 """
+SELECT_MOST_RECENT_ROUNDS = "SELECT Id, Game, Attacker, Defender, AttackerScore, DefenderScore, AttackerFaction, DefenderFaction FROM Rounds ORDER BY CreatedOn;"
