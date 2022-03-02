@@ -1,7 +1,7 @@
 import os, sys, logging
 from discord import Intents
-import sqlite3
 from lib.amina import AminaNaiduBot
+from player_cog import PlayerCog
 from startup_tasks import StartupTasks
 from lib.database_service import DatabaseService
 
@@ -21,6 +21,7 @@ logger2.addHandler(handler2)
 def main():
     discord_token = os.environ.get("DISCORD_TOKEN")
     db_path = os.environ.get("DB_PATH")
+    mysql = os.environ.get("MYSQL")
 
     intents = Intents.default()
     intents.members = True
@@ -30,24 +31,24 @@ def main():
         intents = intents
     )
 
-    if db_path == None:
-        print("please set the DB_PATH enviroment variable")
-        sys.exit(2)
-    else:
+    if db_path != None:
         with DatabaseService(db_path) as cursor:
-            (q, _) = DatabaseService.database_ddl()
-            cursor.executescript(q)
+            script = DatabaseService.database_ddl()
+            cursor.executescript(script)
 
         amina.add_cog(StartupTasks(amina, db_path))
+        amina.add_cog(PlayerCog(amina, DatabaseService(db_path)))
+    elif mysql != None:
+        pass
+    else:
+        print("please set the DB_PATH or MYSQL enviroment variable")
+        sys.exit(1)
 
     if discord_token == None:
         print("please set the DISCORD_TOKEN enviroment variable")
         sys.exit(1)
     else:
         amina.run(discord_token)
-
-    
-    sys.exit(3)
 
 if __name__ == '__main__':
     main()

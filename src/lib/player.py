@@ -1,6 +1,6 @@
 
-from constants import INSERT_PLAYER
-from constants import SELECT_PLAYER_BY_DISCORD
+from lib.constants import INSERT_PLAYER
+from lib.constants import SELECT_PLAYER_BY_DISCORD
 
 class Player():
     def __init__(self, id:int, discord_id:str = None, name:str = None):

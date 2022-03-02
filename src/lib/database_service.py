@@ -1,5 +1,5 @@
 import sqlite3
-from constants import CREATE_DATABASE_TABLES
+from lib.constants import CREATE_DATABASE_TABLES
 
 class DatabaseService():
     def __init__(self, connection_string):
@@ -9,13 +9,10 @@ class DatabaseService():
         self.__connection = sqlite3.connect(self.__connection_string)
         return self.__connection.cursor()
 
-    def __exit__(self):
+    def __exit__(self, type, value, traceback):
         self.__connection.commit()
         self.__connection.close()
 
     @staticmethod
-    def database_ddl(self):
-        return (
-            CREATE_DATABASE_TABLES,
-            ()
-        )
+    def database_ddl() -> str :
+        return CREATE_DATABASE_TABLES
