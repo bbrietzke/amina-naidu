@@ -11,6 +11,8 @@ CREATE TABLE IF NOT EXISTS Rounds(Id INTEGER PRIMARY KEY, Game INTEGER, Attacker
 
 # PLAYERS 
 INSERT_PLAYER = "INSERT INTO Players(DiscordId, Name) VALUES (?,?) ON CONFLICT(DiscordId) DO UPDATE SET Name = excluded.Name;"
+UPDATE_PLAYER_BY_ID = "UPDATE Players SET Name = ? WHERE Id = ?;"
+UPDATE_PLAYER_BY_DISCORD = "UPDATE Players SET Name = ? WHERE DiscordId = ?;"
 SELECT_ALL_PLAYERS = "select id, discordid, name from players order by name;"
 SELECT_PLAYER_BY_DISCORD = "select id, discordid, name from players WHERE discordid = ?"
 
