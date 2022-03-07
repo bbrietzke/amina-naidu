@@ -1,4 +1,4 @@
-from tokenize import Name
+import discord
 from discord.ext.commands import Cog
 from discord.ext import tasks
 from discord.utils import get
@@ -15,7 +15,7 @@ class PlayerCog(Cog, name = "Player Cog"):
         self.players.start()
 
     @Cog.listener()
-    async def on_member_join(self, member):
+    async def on_member_join(self, member:discord.Member):
         logger.info("a new member has joined!")
         with LeagueManager(self.__service) as lm:
             lm.save_player(0, discord_id=member.id, name = member.display_name)
@@ -25,8 +25,11 @@ class PlayerCog(Cog, name = "Player Cog"):
 
         if dm is None:
             general = get(self.__bot.guild.text_channels, name="general")
-            WelcomeUserView(member.display_name, general).show()
-            logger.info("messaged {} on the general chat".format(member.display_name))
+            if not general:
+                WelcomeUserView(member.display_name, general).show()
+                logger.info("messaged {} on the general chat".format(member.display_name))
+            else:
+                logger.info("no general channel? what's up with that?")
         else:
             WelcomeUserDM(member.display_name, dm).show()
             logger.info("DMed {}".format(member.display_name))
