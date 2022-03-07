@@ -12,12 +12,12 @@ CREATE TABLE IF NOT EXISTS Rounds(Id INTEGER PRIMARY KEY, Game INTEGER, Attacker
 # PLAYERS 
 INSERT_PLAYER = "INSERT INTO Players(DiscordId, Name) VALUES (?,?) ON CONFLICT(DiscordId) DO UPDATE SET Name = excluded.Name;"
 UPDATE_PLAYER_BY_ID = "UPDATE Players SET Name = ? WHERE Id = ?;"
-UPDATE_PLAYER_BY_DISCORD = "UPDATE Players SET Name = ? WHERE DiscordId = ?;"
 SELECT_ALL_PLAYERS = "select id, discordid, name from players order by name;"
 SELECT_PLAYER_BY_DISCORD = "select id, discordid, name from players WHERE discordid = ?"
 
 # GAMES
 INSERT_GAME = "INSERT INTO Games(Url, Title, StartWeek) VALUES (?,?,?);"
+UPDATE_GAME = "UPDATE Games SET Url = ?, Title = ? WHERE StartWeek = ?;"
 UPDATE_GAME_MESSAGE = "UPDATE Games SET MessageId = ? WHERE Id = ?;"
 SELECT_CURRENT_ROUND = "SELECT Id, Url, Title, StartWeek FROM Games WHERE StartWeek = ? AND MessageId = NULL;"
 
@@ -25,4 +25,3 @@ SELECT_CURRENT_ROUND = "SELECT Id, Url, Title, StartWeek FROM Games WHERE StartW
 INSERT_ROUND = """INSERT INTO Rounds(Game, Attacker, Defender, AttackerScore, DefenderScore, AttackerFaction, DefenderFaction) VALUES
     (?, (select Id from Players where discordId = ?), (select Id from Players where discordId = ?), ?, ?, ?, ?);
 """
-SELECT_MOST_RECENT_ROUNDS = "SELECT Id, Game, Attacker, Defender, AttackerScore, DefenderScore, AttackerFaction, DefenderFaction FROM Rounds ORDER BY CreatedOn;"

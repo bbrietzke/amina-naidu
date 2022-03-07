@@ -6,7 +6,7 @@ from lib.league_manager import LeagueManager
 from views.welcome_user_view import WelcomeUserView, WelcomeUserDM
 import logging
 
-logger = logging.getLogger('amina')
+logger = logging.getLogger('tasks')
 
 class PlayerCog(Cog, name = "Player Cog"):
     def __init__(self, bot, service_manager):
@@ -16,7 +16,7 @@ class PlayerCog(Cog, name = "Player Cog"):
 
     @Cog.listener()
     async def on_member_join(self, member):
-        logger.info("a new member has joined")
+        logger.info("a new member has joined!")
         with LeagueManager(self.__service) as lm:
             lm.save_player(0, discord_id=member.id, name = member.display_name)
             logger.info("new member {}!".format(member.display_name))
@@ -26,8 +26,10 @@ class PlayerCog(Cog, name = "Player Cog"):
         if dm is None:
             general = get(self.__bot.guild.text_channels, name="general")
             WelcomeUserView(member.display_name, general).show()
+            logger.info("messaged {} on the general chat".format(member.display_name))
         else:
             WelcomeUserDM(member.display_name, dm).show()
+            logger.info("DMed {}".format(member.display_name))
 
     @tasks.loop(hours = 12)
     async def players(self):

@@ -17,6 +17,12 @@ handler2 = logging.StreamHandler(sys.stdout)
 handler2.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger2.addHandler(handler2)
 
+logger3 = logging.getLogger('tasks')
+logger3.setLevel(logging.DEBUG)
+handler3 = logging.StreamHandler(sys.stdout)
+handler3.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger3.addHandler(handler3)
+
 
 def main():
     discord_token = os.environ.get("DISCORD_TOKEN")
@@ -36,7 +42,7 @@ def main():
             script = DatabaseService.database_ddl()
             cursor.executescript(script)
 
-        amina.add_cog(StartupTasks(amina, db_path))
+        amina.add_cog(StartupTasks(amina, DatabaseService(db_path)))
         amina.add_cog(PlayerCog(amina, DatabaseService(db_path)))
     elif mysql != None:
         pass
