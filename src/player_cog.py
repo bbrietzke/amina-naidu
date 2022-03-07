@@ -26,12 +26,12 @@ class PlayerCog(Cog, name = "Player Cog"):
         if dm is None:
             general = get(self.__bot.guild.text_channels, name="general")
             if not general:
-                WelcomeUserView(member.display_name, general).show()
+                await WelcomeUserView(member.display_name, general).show()
                 logger.info("messaged {} on the general chat".format(member.display_name))
             else:
                 logger.info("no general channel? what's up with that?")
         else:
-            WelcomeUserDM(member.display_name, dm).show()
+            await WelcomeUserDM(member.display_name, dm).show()
             logger.info("DMed {}".format(member.display_name))
 
     @tasks.loop(hours = 12)

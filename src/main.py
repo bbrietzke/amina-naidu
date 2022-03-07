@@ -1,7 +1,10 @@
 import os, sys, logging
 from discord import Intents
 from lib.amina import AminaNaiduBot
+from lib.constants import ANNOUNCEMENTS_CHANNEL_NAME
 from player_cog import PlayerCog
+from community_cog import CommunityCog
+from faction_cog import FactionsCog
 from startup_tasks import StartupTasks
 from lib.database_service import DatabaseService
 
@@ -37,12 +40,15 @@ def main():
         intents = intents
     )
 
+    amina.add_cog(StartupTasks(amina))
+    amina.add_cog(CommunityCog(amina, ANNOUNCEMENTS_CHANNEL_NAME))
+    amina.add_cog(FactionsCog(amina))
+
     if db_path != None:
         with DatabaseService(db_path) as cursor:
             script = DatabaseService.database_ddl()
             cursor.executescript(script)
 
-        amina.add_cog(StartupTasks(amina, DatabaseService(db_path)))
         amina.add_cog(PlayerCog(amina, DatabaseService(db_path)))
     elif mysql != None:
         pass

@@ -20,3 +20,4 @@ class WelcomeUserDM():
 My name is Amina Naidu and I am your representative for the leagues that you can participate in.
 
 If you have ideas for channels, or how to make things better, please post them!  We're always excited for feedback.""".format(self.__name))
+
