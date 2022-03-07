@@ -54,7 +54,6 @@ def main():
         pass
     else:
         print("please set the DB_PATH or MYSQL enviroment variable")
-        sys.exit(1)
 
     if discord_token == None:
         print("please set the DISCORD_TOKEN enviroment variable")

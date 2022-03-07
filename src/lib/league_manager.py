@@ -14,7 +14,7 @@ class LeagueManagerInner():
     def __init__(self, service_manager):
         self.__service = service_manager
 
-    def save_player(self, id, discord_id=None, name=None):
+    def save_player(self, id:int, discord_id:str = None, name:str = None):
         player = Player(id, discord_id=discord_id, name = name)
         with self.__service as c:
             (q, p) = player.save()
