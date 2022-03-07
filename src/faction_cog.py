@@ -24,7 +24,7 @@ class FactionsCog(Cog, name = 'Factions'):
 
             await self.create_channel(factions, "arcanists")
             await self.create_channel(factions, "bayou")
-            await self.create_channel(factions, "exporer's_society")
+            await self.create_channel(factions, "explorer's_society")
             await self.create_channel(factions, "guild")
             await self.create_channel(factions, "neverborn")
             await self.create_channel(factions, "resurrectionists")
