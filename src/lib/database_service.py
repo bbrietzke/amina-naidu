@@ -19,6 +19,9 @@ class DatabaseService():
     def execute(self, query, parameters):
         return self.__connection.cursor().execute(query, parameters)
 
+    def executemany(self, query, parameters):
+        return self.__connection.cursor().executemany(query, parameters)
+
     def __exit__(self, type, value, traceback):
         if self.__connection.in_transaction:
             self.__connection.commit()
@@ -46,6 +49,9 @@ class InMemoryDatabase():
     def execute(self, query, parameters):
         return self.__connection.cursor().execute(query, parameters)
 
+    def executemany(self, query, parameters):
+        return self.__connection.cursor().executemany(query, parameters)
+
     def __exit__(self, type, value, traceback):
         if self.__connection.in_transaction:
             self.__connection.commit()
@@ -53,3 +59,7 @@ class InMemoryDatabase():
 
     def database_ddl(self) -> str :
         return CREATE_DATABASE_TABLES
+
+    def commit(self) -> None:
+        if self.__connection.in_transaction:
+            self.__connection.commit()

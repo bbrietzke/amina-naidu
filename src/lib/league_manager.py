@@ -1,4 +1,5 @@
 from datetime import date
+from email import message
 import logging
 
 from lib.player import Player
@@ -32,9 +33,21 @@ class LeagueManagerInner():
             (q, _) = player.save()
             c.executemany(q, models)
 
+    def save_game(self, id:int, message_id:str = None, url:str = None, title:str = None, start_week = None):
+        game = Game(id, url = url, message_id = message_id, title = title, start_week = start_week)
+        (q, p) = game.save()
+        with self.__service as c:
+            r = c.execute(q, p)
+            return r.lastrowid
+
     def show_current_game(self):
         this_week:int = date.today().isocalendar().week
         (q, p) = Game.find_by_week(this_week)
         with self.__service as c:
-            return c.execute(q, p).fetchone()
-            
+            retVal = c.execute(q, p).fetchone()
+            if retVal:
+                (id, url, title, start_week, message_id) = retVal
+                return Game(id, url = url, title = title, start_week = start_week, message_id = message_id)
+            else:
+                return None
+             

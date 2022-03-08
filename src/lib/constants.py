@@ -20,9 +20,9 @@ SELECT_PLAYER_BY_DISCORD = "select id, discordid, name from players WHERE discor
 
 # GAMES
 INSERT_GAME = "INSERT INTO Games(Url, Title, StartWeek) VALUES (?,?,?);"
-UPDATE_GAME = "UPDATE Games SET Url = ?, Title = ? WHERE StartWeek = ?;"
+UPDATE_GAME = "UPDATE Games SET Url = ?, Title = ?, StartWeek = ? WHERE Id = ?;"
 UPDATE_GAME_MESSAGE = "UPDATE Games SET MessageId = ? WHERE Id = ?;"
-SELECT_CURRENT_GAME = "SELECT Id, Url, Title, StartWeek FROM Games WHERE StartWeek = ? AND MessageId = NULL;"
+SELECT_CURRENT_GAME = "SELECT Id, Url, Title, StartWeek, MessageId FROM Games WHERE StartWeek = ?;"
 
 # ROUNDS
 INSERT_ROUND = """INSERT INTO Rounds(Game, Attacker, Defender, AttackerScore, DefenderScore, AttackerFaction, DefenderFaction) VALUES

@@ -1,5 +1,5 @@
 
-from lib.constants import SELECT_CURRENT_GAME
+from lib.constants import SELECT_CURRENT_GAME, INSERT_GAME, UPDATE_GAME
 
 class Game():
     def __init__(self, id:int, url:str = None, message_id:str = None, title:str = None, start_week:str = None):
@@ -10,23 +10,23 @@ class Game():
         self.__start_week = start_week
 
     @property
-    def id(self):
+    def id(self) -> int:
         return self.__id
 
     @property
-    def url(self):
+    def url(self) -> str:
         return self.__url
 
     @property
-    def message_id(self):
+    def message_id(self) -> str:
         return self.__message_id
 
     @property
-    def title(self):
+    def title(self) -> str:
         return self.__title
 
     @property
-    def start_week(self):
+    def start_week(self) -> int:
         return self.__start_week
 
     @message_id.setter
@@ -35,9 +35,15 @@ class Game():
 
     def save(self):
         if self.__id:
-            pass
+            return (
+                UPDATE_GAME,
+                (self.__url, self.__title, self.__start_week, self.__id,)
+            )
         else:
-            pass
+            return (
+                INSERT_GAME,
+                (self.__url, self.__title, self.__start_week,)
+            )
 
     @staticmethod
     def find_by_week(week):
@@ -46,6 +52,7 @@ class Game():
             ( week, )
         )
 
+    @staticmethod
     def find_by_message_id(message_id):
         return (
             "",
