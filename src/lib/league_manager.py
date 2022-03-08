@@ -1,4 +1,10 @@
+from datetime import date
+import logging
+
 from lib.player import Player
+from lib.games import Game
+
+logger = logging.getLogger("league")
 
 class LeagueManager():
     def __init__(self, service_manager):
@@ -26,3 +32,9 @@ class LeagueManagerInner():
             (q, _) = player.save()
             c.executemany(q, models)
 
+    def show_current_game(self):
+        this_week:int = date.today().isocalendar().week
+        (q, p) = Game.find_by_week(this_week)
+        with self.__service as c:
+            return c.execute(q, p).fetchone()
+            

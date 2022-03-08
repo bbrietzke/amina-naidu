@@ -26,6 +26,12 @@ handler3 = logging.StreamHandler(sys.stdout)
 handler3.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger3.addHandler(handler3)
 
+logger4 = logging.getLogger('league')
+logger4.setLevel(logging.DEBUG)
+handler4 = logging.StreamHandler(sys.stdout)
+handler4.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger4.addHandler(handler4)
+
 
 def main():
     discord_token = os.environ.get("DISCORD_TOKEN")
@@ -39,8 +45,7 @@ def main():
         command_prefix = '!',
         intents = intents
     )
-
-    amina.add_cog(StartupTasks(amina))
+    
     amina.add_cog(CommunityCog(amina, ANNOUNCEMENTS_CHANNEL_NAME))
     amina.add_cog(FactionsCog(amina))
 
