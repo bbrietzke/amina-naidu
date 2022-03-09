@@ -15,7 +15,6 @@ class CommunityCog(Cog, name = 'Community'):
 
     @tasks.loop(hours = 168)
     async def channel_setup(self):
-        await self.__bot.wait_until_ready()
         logger.info("setting up channels")
         for guild in self.__bot.guilds:
             community = get(guild.categories, name="Community")
@@ -25,15 +24,21 @@ class CommunityCog(Cog, name = 'Community'):
 
             await self.create_channel(community, self.__announce_at)
             await self.create_channel(community, "battle_reports")
+            await self.create_channel(community, "buy-sell-trade")
             await self.create_channel(community, "chat")
+            await self.create_channel(community, "looking-for-game")
             await self.create_channel(community, "hobby_inspiration")
             await self.create_channel(community, "rules_questions")
-            await self.create_channel(community, "buy-sell-trade")
+
+    @channel_setup.before_loop
+    async def before_channel_setup(self):
+       await self.__bot.wait_until_ready()
 
     async def create_channel(self, category:discord.CategoryChannel, channel_name:str):
         chan = get(category.text_channels, name = channel_name)
         if not chan:
             await category.create_text_channel(channel_name)
+
 
 
 # https://discord.gg/C6AQaJcDdn

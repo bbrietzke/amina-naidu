@@ -34,12 +34,12 @@ class PlayerCog(Cog, name = "Player Cog"):
             await WelcomeUserDM(member.display_name, dm).show()
             logger.info("DMed {}".format(member.display_name))
 
-    @tasks.loop(hours = 12)
+    @tasks.loop(minutes=0, hours=12, seconds=0, loop = None)
     async def players(self):
         logger.info("starting to setup players")
         cnt = 0
         models = []
-        await self.__bot.wait_until_ready()
+        
         for member in self.__bot.get_all_members():
             cnt = cnt + 1
             models.append((member.id, member.display_name,))
@@ -48,3 +48,7 @@ class PlayerCog(Cog, name = "Player Cog"):
             lm.save_players(models)
 
         logger.info("added or updated {} members".format(len(models)))
+
+    @players.before_loop
+    async def before_players(self):
+       await self.__bot.wait_until_ready()

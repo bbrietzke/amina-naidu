@@ -5,7 +5,7 @@ from lib.constants import ANNOUNCEMENTS_CHANNEL_NAME
 from player_cog import PlayerCog
 from community_cog import CommunityCog
 from faction_cog import FactionsCog
-from startup_tasks import StartupTasks
+from league_cog import LeagueCog
 from lib.database_service import DatabaseService
 
 logger = logging.getLogger('discord')
@@ -45,7 +45,7 @@ def main():
         command_prefix = '!',
         intents = intents
     )
-    
+
     amina.add_cog(CommunityCog(amina, ANNOUNCEMENTS_CHANNEL_NAME))
     amina.add_cog(FactionsCog(amina))
 
@@ -55,6 +55,7 @@ def main():
             cursor.executescript(script)
 
         amina.add_cog(PlayerCog(amina, DatabaseService(db_path)))
+        amina.add_cog(LeagueCog(amina, DatabaseService(db_path), announcements_channel = None))
     elif mysql != None:
         pass
     else:

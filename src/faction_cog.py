@@ -14,7 +14,6 @@ class FactionsCog(Cog, name = 'Factions'):
 
     @tasks.loop(hours = 168)
     async def channel_setup(self):
-        await self.__bot.wait_until_ready()
         logger.info("setting up faction channels")
         for guild in self.__bot.guilds:
             factions = get(guild.categories, name="factions")
@@ -31,6 +30,9 @@ class FactionsCog(Cog, name = 'Factions'):
             await self.create_channel(factions, "resurrectionists")
             await self.create_channel(factions, "ten_thunders")
 
+    @channel_setup.before_loop
+    async def before_channel_setup(self):
+       await self.__bot.wait_until_ready()
 
     async def create_channel(self, category:discord.CategoryChannel, channel_name:str):
         chan = get(category.text_channels, name = channel_name)
