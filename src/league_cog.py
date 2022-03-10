@@ -16,9 +16,10 @@ class LeagueCog(Cog, name = "League Commands"):
         self.__service = service_manager
         self.__announcements = announcements_channel
         self.__bot = bot
+        self.announce_current_game.start()
 
     @commands.is_owner()
-    @commands.command(name = "add-game", usage = "YYYY/MM/DD http://example.me 'Description goes here'", brief = "Adds a league game for a specific week to the system.")
+    @commands.command(name = "add-game", usage = "YYYY/MM/DD http://example.me \"Description goes here\"", brief = "Adds a league game for a specific week to the system.")
     async def add_game(self, ctx, week_of:str, url: str, description: str):
         _date:str = datetime.strptime(week_of, '%Y/%m/%d').isocalendar().week
 
@@ -39,6 +40,15 @@ class LeagueCog(Cog, name = "League Commands"):
     @commands.command(name = "join-league", brief = "Join the league with a specific faction provided with the command", usage = "faction (a|b|es|g|nb|o|r|10t)")
     async def join_league(self, ctx):
         pass
+
+    @tasks.loop(minutes=10, hours=0, seconds=0, loop = None)
+    async def announce_current_game(self):
+        logger.info("starting announce_current_game")
+        _date:str = datetime.today().isocalendar().week
+
+    @announce_current_game.before_loop
+    async def before_announce_current_game(self):
+       await self.__bot.wait_until_ready()
 
     async def show_current_game(self):
         with LeagueManager(self.__service) as lm:

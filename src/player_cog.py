@@ -34,7 +34,7 @@ class PlayerCog(Cog, name = "Player Cog"):
             await WelcomeUserDM(member.display_name, dm).show()
             logger.info("DMed {}".format(member.display_name))
 
-    @tasks.loop(minutes=0, hours=12, seconds=0, loop = None)
+    @tasks.loop(minutes=10, hours=0, seconds=0, loop = None)
     async def players(self):
         logger.info("starting to setup players")
         cnt = 0
