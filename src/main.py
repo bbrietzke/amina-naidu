@@ -6,6 +6,7 @@ from player_cog import PlayerCog
 from community_cog import CommunityCog
 from faction_cog import FactionsCog
 from league_cog import LeagueCog
+from rss_cog import RSSCog
 from lib.database_service import DatabaseService
 
 logger = logging.getLogger('discord')
@@ -32,6 +33,12 @@ handler4 = logging.StreamHandler(sys.stdout)
 handler4.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger4.addHandler(handler4)
 
+logger5 = logging.getLogger('RSS')
+logger5.setLevel(logging.DEBUG)
+handler5 = logging.StreamHandler(sys.stdout)
+handler5.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
+logger4.addHandler(handler5)
+
 
 def main():
     discord_token = os.environ.get("DISCORD_TOKEN")
@@ -56,6 +63,7 @@ def main():
 
         amina.add_cog(PlayerCog(amina, DatabaseService(db_path)))
         amina.add_cog(LeagueCog(amina, DatabaseService(db_path), announcements_channel = None))
+        amina.add_cog(RSSCog(amina, DatabaseService(db_path), announcements_channel = None))
     elif mysql != None:
         pass
     else:

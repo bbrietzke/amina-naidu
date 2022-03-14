@@ -31,7 +31,7 @@ class LeagueCog(Cog, name = "League Commands"):
         except IntegrityError as error:
             await IntegrityErrorView(ctx.message).show()
 
-    @commands.command(name = "show-game", brief = "Shows the current game for the week")
+    @commands.command(name = "show-game", brief = "Shows the current game for this week")
     async def show_game(self, ctx):
         game = await self.show_current_game()
 
@@ -41,7 +41,7 @@ class LeagueCog(Cog, name = "League Commands"):
     async def join_league(self, ctx):
         pass
 
-    @tasks.loop(minutes=10, hours=0, seconds=0, loop = None)
+    @tasks.loop(minutes=240, hours=0, seconds=0, loop = None)
     async def announce_current_game(self):
         logger.info("starting announce_current_game")
         _date:str = datetime.today().isocalendar().week

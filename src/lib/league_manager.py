@@ -1,5 +1,4 @@
 from datetime import date
-from email import message
 import logging
 
 from lib.player import Player
@@ -51,3 +50,13 @@ class LeagueManagerInner():
             else:
                 return None
              
+    def show_feeds(self):
+        with self.__service as c:
+            retVal = []
+            feeds = c.execute("SELECT URL FROM Feeds", ()).fetchall()
+            if feeds:
+                for feed in feeds:
+                    (url,) = feed
+                    retVal.append(url)
+                
+            return retVal

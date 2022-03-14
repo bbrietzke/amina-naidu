@@ -23,17 +23,17 @@ class Player():
         if self.__id:
             return (
                 UPDATE_PLAYER_BY_ID, 
-                (self.__name, self.__id)
+                (self.__name, self.__id,)
             )
         else: 
             return (
                 INSERT_PLAYER, 
-                (self.__discord_id, self.__name)
+                (self.__discord_id, self.__name,)
             )
 
     @staticmethod
     def find_by_discord_id(discord_id):
         return (
             SELECT_PLAYER_BY_DISCORD,
-            (discord_id)
+            (discord_id,)
         )
