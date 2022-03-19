@@ -7,6 +7,7 @@ from discord.utils import get
 from lib.league_manager import LeagueManager
 from views.league_views import CurrentGameView, AddGameView, IntegrityErrorView
 from views.reactions import ThumbsUpReaction, ErrorReaction, UnknownReaction
+from lib.games import Game
 import logging
 
 logger = logging.getLogger('league')
@@ -33,7 +34,7 @@ class LeagueCog(Cog, name = "League Commands"):
 
     @commands.command(name = "show-game", brief = "Shows the current game for this week")
     async def show_game(self, ctx):
-        game = await self.show_current_game()
+        game = self.show_current_game()
 
         await CurrentGameView(ctx.message.channel, game).show()
 
@@ -44,13 +45,31 @@ class LeagueCog(Cog, name = "League Commands"):
     @tasks.loop(minutes=240, hours=0, seconds=0, loop = None)
     async def announce_current_game(self):
         logger.info("starting announce_current_game")
-        _date:str = datetime.today().isocalendar().week
+        _day:int = datetime.today().isocalendar().weekday
+
+        if not _day:
+            logger.info("today is new game day")
+            for guild in self.__bot.guilds:
+                channel = get(guild.text_channels, name = self.__announcements)
+                if channel:
+                    game:Game = self.show_current_game_without_message_id()
+                    if game:
+                        logger.debug("We have a game for this week")
+                        view = CurrentGameView(channel, game)
+                        await view.show()
+                        game.message_id = view.message_id
+                        with LeagueManager(self.__service) as lm:
+                            lm.save_game(game.id, game.message_id, game.url, game.title, game.start_week)
 
     @announce_current_game.before_loop
     async def before_announce_current_game(self):
        await self.__bot.wait_until_ready()
 
-    async def show_current_game(self):
+    def show_current_game(self) -> Game:
         with LeagueManager(self.__service) as lm:
             return lm.show_current_game()
+
+    def show_current_game_without_message_id(self) -> Game:
+        with LeagueManager(self.__service) as lm:
+            return lm.show_current_game_without_message_id()
 

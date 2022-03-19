@@ -6,11 +6,17 @@ class CurrentGameView():
     def __init__(self, channel:TextChannel, game:Game):
         self.__channel = channel
         self.__game = game
+        self.__message_id:str = None
+
+    @property 
+    def message_id(self):
+        return self.__message_id
 
     async def show(self) -> None:
         if self.__game:
             e = self.__embed(self.__game)
-            await self.__channel.send(embed = e)
+            msg = await self.__channel.send(embed = e)
+            self.__message_id = msg.id
         else:
             await self.__channel.send("There isn't a game setup for this week.")
     

@@ -32,14 +32,14 @@ class LeagueManagerInner():
             (q, _) = player.save()
             c.executemany(q, models)
 
-    def save_game(self, id:int, message_id:str = None, url:str = None, title:str = None, start_week = None):
+    def save_game(self, id:int, message_id:str = None, url:str = None, title:str = None, start_week:int = None) -> int:
         game = Game(id, url = url, message_id = message_id, title = title, start_week = start_week)
         (q, p) = game.save()
         with self.__service as c:
             r = c.execute(q, p)
             return r.lastrowid
 
-    def show_current_game(self):
+    def show_current_game(self) -> Game:
         this_week:int = date.today().isocalendar().week
         (q, p) = Game.find_by_week(this_week)
         with self.__service as c:
@@ -49,14 +49,14 @@ class LeagueManagerInner():
                 return Game(id, url = url, title = title, start_week = start_week, message_id = message_id)
             else:
                 return None
-             
-    def show_feeds(self):
+
+    def show_current_game_without_message_id(self) -> Game:
+        this_week:int = date.today().isocalendar().week
+        (q, p) = Game.find_by_week_without_message_id(this_week)
         with self.__service as c:
-            retVal = []
-            feeds = c.execute("SELECT URL FROM Feeds", ()).fetchall()
-            if feeds:
-                for feed in feeds:
-                    (url,) = feed
-                    retVal.append(url)
-                
-            return retVal
+            retVal = c.execute(q, p).fetchone()
+            if retVal:
+                (id, url, title, start_week, message_id) = retVal
+                return Game(id, url = url, title = title, start_week = start_week, message_id = message_id)
+            else:
+                return None

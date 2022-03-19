@@ -33,11 +33,11 @@ handler4 = logging.StreamHandler(sys.stdout)
 handler4.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
 logger4.addHandler(handler4)
 
-logger5 = logging.getLogger('RSS')
+logger5 = logging.getLogger('rss')
 logger5.setLevel(logging.DEBUG)
 handler5 = logging.StreamHandler(sys.stdout)
 handler5.setFormatter(logging.Formatter('%(asctime)s:%(levelname)s:%(name)s: %(message)s'))
-logger4.addHandler(handler5)
+logger5.addHandler(handler5)
 
 
 def main():
@@ -62,8 +62,8 @@ def main():
             cursor.executescript(script)
 
         amina.add_cog(PlayerCog(amina, DatabaseService(db_path)))
-        amina.add_cog(LeagueCog(amina, DatabaseService(db_path), announcements_channel = None))
-        amina.add_cog(RSSCog(amina, DatabaseService(db_path), announcements_channel = None))
+        amina.add_cog(LeagueCog(amina, DatabaseService(db_path), announcements_channel = "amina_testing"))
+        amina.add_cog(RSSCog(amina, DatabaseService(db_path), announcements_channel = ANNOUNCEMENTS_CHANNEL_NAME))
     elif mysql != None:
         pass
     else:
